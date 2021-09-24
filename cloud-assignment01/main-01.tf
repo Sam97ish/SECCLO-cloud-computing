@@ -22,10 +22,14 @@ resource "google_compute_instance" "ass01" {
 }
 }
 
+resource "google_compute_address" "ip_address" {
+  name = "ip-ass01"
+}
+
 output "vm_name" {
   value = google_compute_instance.ass01.name
 }
 
 output "public_ip" {
-  value = google_compute_instance.ass01.network_interface.public_ip
+  value = google_compute_address.ip_address.address
 }
