@@ -19,11 +19,12 @@ resource "google_compute_instance" "ass01" {
 }
  network_interface {
    network = "default"
-}
-}
 
-resource "google_compute_address" "ip_address" {
-  name = "ip-ass01"
+   //generates public ip using nat_ip
+   access_config {
+     
+   }
+}
 }
 
 output "vm_name" {
@@ -31,5 +32,5 @@ output "vm_name" {
 }
 
 output "public_ip" {
-  value = google_compute_address.ip_address.address
+  value = google_compute_instance.ass01.network_interface[0].access_config[0].nat_ip
 }
