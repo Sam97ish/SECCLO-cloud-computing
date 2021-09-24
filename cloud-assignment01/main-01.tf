@@ -1,23 +1,31 @@
-provider "google" {
-  version = "3.5.0"
-
-  credentials = file("tfsvc.json")
-
-  project = "youtube-demo-255723"
-  region  = "us-central1"
-  zone    = "us-central1-c"
+variable "vm_name_input" {
+  type=string
 }
 
-resource "google_compute_instance" "appserver" {
-  name = "secondary-application-server"
+provider "google" {
+  project = "buoyant-embassy-326120"
+  region  = "europe-north1"
+  zone    = "europe-north1-a"
+}
+
+resource "google_compute_instance" "ass01" {
+  name = var.vm_name_input
   machine_type = "f1-micro"
 
   boot_disk {
    initialize_params {
-     image = "debian-cloud/debian-9"
+     image = "debian-cloud/debian-10-buster-v20210817"
    }
 }
  network_interface {
    network = "default"
 }
+}
+
+output "vm_name" {
+  value = google_compute_instance.ass01.name
+}
+
+output "public_ip" {
+  value = google_compute_instance.ass01.network_interface.public_ip
 }
