@@ -1,0 +1,19 @@
+services:
+  backend:
+    container_name: flaskbackend
+    image: flaskbackend:v1
+    build: ./exercise
+    #environment:
+    #  FLASK_ENV: development
+    ports:
+      - 5000:5000
+    depends_on:
+        - mongo
+    #volumes:
+    #  - ./exercise:/usr/app
+  mongo:
+    container_name: mongo
+    image: mongo:4.2.0
+    ports:
+      - 1048:27017
+    

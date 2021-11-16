@@ -1,0 +1,272 @@
+openapi: 3.0.0
+info:
+  description: Photos API
+  version: "1.0.0"
+  title: Simple photos API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /photo:
+    post:
+      summary: 'adds a photo to the database'
+      operationId: 'Create'
+      description: 'Adds a photo to the database'
+      responses:
+        '201':
+          description: 'Created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value: 
+                    message: 'Photo successfully created'
+                    id: 'photo_id'
+                         
+        '422':
+          description: 'Unprocessable entity'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+        default:
+          description: 'Unprocessable entity'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+      requestBody:
+        description: 'photo to be posted'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Photo'
+                         
+  /photos:
+    get:
+      summary: gets a photo to the database
+      operationId: READ
+      description: gets a photo to the database
+      parameters:
+        - in: query
+          name: access
+          description: pass photos to read them back.
+          required: true
+          schema:
+            $ref: '#/components/schemas/Photos'
+      responses:
+        '200':
+          description: Read
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photos'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+        default:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+  /photo/{photo_id}:
+    get:
+      description: 'Get the photo that has id photo_id'
+      parameters:
+        - $ref: '#/components/parameters/photo_id'
+      responses:
+        '200':
+          description: 'READ'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+        default:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+    put:
+      description: 'Get the photo that has id photo_id'
+      parameters:
+        - $ref: '#/components/parameters/photo_id'
+      requestBody:
+        description: 'photo to be updated'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Photo'
+      responses:
+        '200':
+          description: 'UPDATE'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value: 
+                    message: 'Photo successfully updated'
+                    id: 'photo_id'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+        '422':
+          description: 'Unprocessable entity'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+        default:
+          description: 'Unprocessable entity'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+    delete:
+      description: 'delete the photo that has id photo_id'
+      parameters:
+        - $ref: '#/components/parameters/photo_id'
+      responses:
+        '204':
+          description: 'The resource was deleted successfully.'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+        default:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Success:
+                  value: 
+                    message: 'err'
+        
+  
+components:
+  schemas:
+    Photo:
+      type: object
+      required:
+        - name
+        - access
+        - location
+        - file
+        - created_date
+        - modified_date
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 20
+        description:
+          type: string
+          maxLength: 100
+        access:
+          enum: [public,private]
+        location:
+          type: string
+        file:
+          type: string
+        created_date:
+          type: string
+          format: date-time
+        modified_date: 
+          type: string
+          format: date-time
+    Photos:
+      type: array
+      description: An array of photos
+      items:
+        $ref: '#/components/schemas/Photo'
+    Success:
+      type: object
+      properties:
+        message:
+          type: string
+        id: 
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+  parameters:
+    photo_id:
+      name: photo_id
+      in: path
+      description: Id of photo.
+      required: true
+      schema:
+        type: integer
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/assignment0/photo/1.0.0
